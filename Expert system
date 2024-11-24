@@ -1,0 +1,35 @@
+% Facts: Symptoms associated with diseases
+disease(flu) :- symptom(fever), symptom(cough), symptom(fatigue).
+disease(cold) :- symptom(cough), symptom(sore_throat), symptom(runny_nose).
+disease(covid) :- symptom(fever), symptom(cough), symptom(loss_of_taste), symptom(breath_shortness).
+disease(stomach_bug) :- symptom(nausea), symptom(vomiting), symptom(diarrhea).
+
+% Symptoms
+symptom(fever) :- ask('Do you have a fever?').
+symptom(cough) :- ask('Do you have a cough?').
+symptom(fatigue) :- ask('Are you feeling fatigued?').
+symptom(sore_throat) :- ask('Do you have a sore throat?').
+symptom(runny_nose) :- ask('Do you have a runny nose?').
+symptom(loss_of_taste) :- ask('Have you lost your sense of taste?').
+symptom(breath_shortness) :- ask('Are you experiencing shortness of breath?').
+symptom(nausea) :- ask('Are you feeling nauseous?').
+symptom(vomiting) :- ask('Are you experiencing vomiting?').
+symptom(diarrhea) :- ask('Are you experiencing diarrhea?').
+
+% Helper to ask questions
+ask(Question) :-
+    write(Question), nl,
+    read(Response),
+    (Response == yes -> true ; fail).
+
+% Rule to diagnose disease
+diagnose :-
+    findall(Disease, disease(Disease), Diseases),
+    (   Diseases \= []
+    ->  format('You might have: ~w~n', [Diseases])
+    ;   write('No disease detected based on the symptoms provided.') ).
+
+% Start the diagnosis process
+start :-
+    write('Answer the following questions with "yes" or "no":'), nl,
+    diagnose.

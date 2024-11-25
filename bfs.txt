@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_NODES 100  // Maximum number of nodes in the graph
+
+// A utility function to perform Breadth-First Search
+void breadthFirstSearch(int graph[MAX_NODES][MAX_NODES], int n, int start) {
+    bool visited[MAX_NODES] = {false};  // To keep track of visited nodes
+    int queue[MAX_NODES];               // Queue to explore nodes level by level
+    int front = 0, rear = 0;             // Front and rear pointers for the queue
+
+    // Mark the starting node as visited and enqueue it
+    visited[start] = true;
+    queue[rear++] = start;
+
+    printf("BFS traversal starting from node %d: ", start);
+
+    while (front < rear) {
+        int currentNode = queue[front++];  // Dequeue a node
+        printf("%d ", currentNode);        // Process the current node
+
+        // Enqueue all unvisited neighbors
+        for (int neighbor = 0; neighbor < n; neighbor++) {
+            if (graph[currentNode][neighbor] && !visited[neighbor]) {
+                visited[neighbor] = true;
+                queue[rear++] = neighbor;  // Enqueue the neighbor
+            }
+        }
+    }
+
+    printf("\n");
+}
+
+int main() {
+    int n, e;  // Number of nodes and edges
+    int graph[MAX_NODES][MAX_NODES] = {0};  // Adjacency matrix
+
+    // Input the number of nodes and edges
+    printf("Enter the number of nodes and edges: ");
+    scanf("%d %d", &n, &e);
+
+    // Input the edges
+    printf("Enter the edges (u v) where u and v are nodes:\n");
+    for (int i = 0; i < e; ++i) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        graph[u][v] = 1;  // Mark edge from u to v
+        graph[v][u] = 1;  // Mark edge from v to u (undirected graph)
+    }
+
+    int start;  // Starting node for BFS
+    printf("Enter the starting node for BFS: ");
+    scanf("%d", &start);
+
+    // Perform BFS
+    breadthFirstSearch(graph, n, start);
+
+    return 0;
+}
